@@ -1,0 +1,5 @@
+injetandoErros:
+  image: devlopesbernardo/injetando_erros:2.0
+  imagePullPolicy: Always
+  port: 3000
+  replicas: 1

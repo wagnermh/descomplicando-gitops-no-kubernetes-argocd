@@ -1,0 +1,5 @@
+# Chart.yaml
+apiVersion: v2
+name: injetando_erros
+description: A Helm chart for injetando_erros
+version: 0.1.0
