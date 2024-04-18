@@ -1,0 +1,64 @@
+nameOverride: argocd
+
+server:
+  ingress:
+    enabled: true
+    ingressClassName: cloudflare-tunnel
+    hostname: argocd.bernardolopes.com
+    path: /
+
+repoServer:
+  metrics:
+    enabled: true
+dex:
+  enabled: true
+  env:
+    - name: ARGO_WORKFLOWS_SSO_CLIENT_SECRET
+      valueFrom:
+        secretKeyRef:
+          name: argo-workflows-sso
+          key: client-secret
+
+configs:
+  params:
+    server.insecure: true
+    server.dex.server: https://argo-argocd-dex-server:5556
+
+  cm:
+    url: https://argocd.bernardolopes.com
+    dex.config: |
+      staticClients:
+      # This is the OIDC client ID in plaintext
+      - id: argo-workflows-sso
+        name: Argo Workflow
+        redirectURIs:
+          - https://workflows.bernardolopes.com/oauth2/callback
+        secretEnv: ARGO_WORKFLOWS_SSO_CLIENT_SECRET
+      connectors:
+      - type: github
+        id: github
+        name: GitHub
+        config:
+          clientID: eeb0d5439fa3d775eca7
+          clientSecret: c0cd97e254b5ca84e7c68c67763b94852c628610
+          orgs: 
+          - name: Treinamento-ArgoCD
+
+  rbac:
+    policy.default: role:readonly
+    policy.csv: |
+      p, role:org-admin, applications, *, */*, allow
+      p, role:org-admin, clusters, get, *, allow
+      p, role:org-admin, repositories, *, *, allow
+      p, role:org-admin, logs, get, *, allow
+      p, role:org-admin, exec, create, */*, allow
+      g, Treinamento-ArgoCD:DevOps, role:org-admin
+    scopes: '[groups]'
+
+applicationSet:
+  enabled: true
+  ingress:
+    enabled: true
+    ingressClassName: cloudflare-tunnel
+    hostname: applicationset.bernardolopes.com
+    path: /

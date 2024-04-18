@@ -1,0 +1,35 @@
+server:
+  authMode: sso
+    #secure: true
+  sso:
+    enabled: true
+    issuer: https://argocd.bernardolopes.com/api/dex
+    insecureSkipVerify: true
+    clientId:
+      name: argo-workflows-sso
+      key: client-id
+    clientSecret:
+      name: argo-workflows-sso
+      key: client-secret
+    redirectUrl: "https://workflows.bernardolopes.com/oauth2/callback"
+    scopes: 
+      - groups
+    rbac: 
+      enabled: true
+  ingress:
+    enabled: true
+    ingressClassName: cloudflare-tunnel
+    hosts:
+      - workflows.bernardolopes.com
+
+createAggregateRoles: true
+
+controller:
+    workflowNamespaces:
+        - argo
+    workflowDefaults:
+        spec:
+            serviceAccountName: argo-workflow
+workflow:
+    serviceAccount:
+        create: true
