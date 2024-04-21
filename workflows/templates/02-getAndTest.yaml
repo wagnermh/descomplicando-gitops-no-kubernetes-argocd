@@ -1,0 +1,16 @@
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  name: get-and-test
+  namespace: argo
+spec:
+  entrypoint: get-and-test
+  templates:
+    - name: get-and-test
+      container:
+        image: golang:1.22
+        command: [sh, -c]
+        args: ["cd /src && go get . && go test -v ."]
+        volumeMounts:
+        - name: workdir
+          mountPath: /src

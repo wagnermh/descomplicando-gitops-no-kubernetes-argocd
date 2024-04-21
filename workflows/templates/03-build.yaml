@@ -1,0 +1,40 @@
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  name: docker-build
+  namespace: argo
+spec:
+  entrypoint: docker-build
+  arguments:
+    parameters:
+      - name: destination
+        value: ""
+        
+  templates:
+  - name: docker-build
+    inputs:
+      parameters:
+        - name: destination
+          value: ""
+    container: 
+      image: gcr.io/kaniko-project/executor:debug
+      command: [/kaniko/executor]
+      args: 
+        - --context=/src
+        - --dockerfile=/src/Dockerfile
+        - --destination={{inputs.parameters.destination}}:latest
+      volumeMounts:
+      - name: workdir
+        mountPath: /src
+      - name: docker-credentials
+        mountPath: /kaniko/.docker/
+
+
+
+
+
+
+
+
+
+

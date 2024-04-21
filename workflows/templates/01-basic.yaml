@@ -1,0 +1,24 @@
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  name: github-clone
+  namespace: argo
+spec:
+  entrypoint: github-clone
+  arguments:
+    parameters:
+      - name: repo
+        value: https://github.com/bernardolsp/go-todo.git
+  templates:
+    - name: github-clone
+      inputs:
+        parameters:
+          - name: repo
+            value: ""
+      container:
+        image: alpine/git
+        command: [git]
+        args: ["clone", '{{inputs.parameters.repo}}', "/src"]
+        volumeMounts:
+        - name: workdir
+          mountPath: /src
