@@ -1,0 +1,49 @@
+nameOverride: argocd
+
+configs:
+  cmp:
+    create: true
+    plugins:
+      deploycm:
+        init:
+          command: [sh]
+          args: [-c, 'echo "Initializing..."']
+        generate:
+          command: [sh, -c]
+          args:
+            - |
+              echo "{\"kind\": \"ConfigMap\", \"apiVersion\": \"v1\", \"metadata\": { \"name\": \"$ARGOCD_APP_NAME\", \"namespace\": \"$ARGOCD_APP_NAMESPACE\", \"annotations\": {\"Foo\": \"$ARGOCD_ENV_FOO\", \"KubeVersion\": \"$KUBE_VERSION\", \"KubeApiVersion\": \"$KUBE_API_VERSIONS\",\"Bar\": \"baz\"}}}"
+        discover:
+          find:
+            command: [sh, -c, find . -name '*.go']
+
+repoServer:
+  volumes:
+    - name: cmp-tmp
+      emptyDir: {}
+    - name: cmp-plugin
+      configMap:
+        name: argocd-cmp-cm
+  extraContainers:
+    - name: cmp-my-plugin
+      command:
+        - /var/run/argocd/argocd-cmp-server
+      image: busybox
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 999
+      volumeMounts:
+        - mountPath: /var/run/argocd
+          name: var-files
+        - mountPath: /home/argocd/cmp-server/plugins
+          name: plugins
+        - mountPath: /home/argocd/cmp-server/config/plugin.yaml
+          subPath: deploycm.yaml
+          name: cmp-plugin
+        - mountPath: /tmp
+          name: cmp-tmp
+
+
+applicationSet:
+  enabled: true
+
