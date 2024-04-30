@@ -1,8 +1,13 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"math/rand"
+)
 
 func main() {
+
+	numberOfPods := rand.Intn(10) + 1
 	// Valid Kubernetes deployment YAML
 	yaml := `
 apiVersion: apps/v1
@@ -10,7 +15,7 @@ kind: Deployment
 metadata:
   name: nginx-deployment
 spec:
-  replicas: 3
+  replicas: ` + fmt.Sprintf("%d", numberOfPods) + `
   selector:
     matchLabels:
       app: nginx

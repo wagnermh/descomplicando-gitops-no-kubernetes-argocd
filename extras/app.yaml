@@ -1,17 +1,17 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: go-todo
+  name: go-todo-test
   namespace: argo
 spec:
   project: 'default'
   source:
     plugin: {}
-    repoURL: https://github.com/bernardolsp/go-todo
-    targetRevision: HEAD
-    path: "."
+    repoURL: https://github.com/bernardolsp/descomplicando-gitops-no-kubernetes-argocd
+    targetRevision: feat/day-extras
+    path: "extras"
   destination:
-    namespace: go-todo
+    namespace: go-todo-test
     server: 'https://kubernetes.default.svc'
   syncPolicy:
     automated:

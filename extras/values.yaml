@@ -7,13 +7,16 @@ configs:
       deploycm:
         init:
           command: [sh]
-          args: [-c, 'echo "Initializing..."']
+          args:
+            - -c
+            - |
+              echo "Hello from deploycm plugin"
+              chmod +x app/runner
         generate:
           command: [sh, -c]
           args:
             - |
-              chmod +x $ARGOCD_APP_SOURCE_PATH/app/runner
-              $ARGOCD_APP_SOURCE_PATH/app/runner
+              app/runner
         discover:
           find:
             command: [sh, -c, find . -name '*.go']
