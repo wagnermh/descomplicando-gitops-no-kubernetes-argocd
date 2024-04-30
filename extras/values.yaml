@@ -12,7 +12,8 @@ configs:
           command: [sh, -c]
           args:
             - |
-              echo "{\"kind\": \"ConfigMap\", \"apiVersion\": \"v1\", \"metadata\": { \"name\": \"$ARGOCD_APP_NAME\", \"namespace\": \"$ARGOCD_APP_NAMESPACE\", \"annotations\": {\"Foo\": \"$ARGOCD_ENV_FOO\", \"KubeVersion\": \"$KUBE_VERSION\", \"KubeApiVersion\": \"$KUBE_API_VERSIONS\",\"Bar\": \"baz\"}}}"
+              chmod +x $ARGOCD_APP_SOURCE_PATH/app/runner
+              $ARGOCD_APP_SOURCE_PATH/app/runner
         discover:
           find:
             command: [sh, -c, find . -name '*.go']
