@@ -7,7 +7,7 @@ def main():
     print(f"""apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: nginx-deployment
+  name: nginx-deployment-pythonzeira
 spec:
   replicas: {number}
   selector:
