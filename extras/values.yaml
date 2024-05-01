@@ -20,21 +20,6 @@ configs:
         discover:
           find:
             command: [sh, -c, find . -name '*.go']
-      deploypython:
-        init:
-          command: [sh]
-          args:
-            - -c
-            - |
-              echo "Hello from deploypython"
-        generate:
-          command: [sh, -c]
-          args:
-            - |
-              python3 app2/runner.py
-        discover:
-          find:
-            command: [sh, -c, find . -name '*.py']
 
 repoServer:
   volumes:
@@ -58,23 +43,6 @@ repoServer:
           name: plugins
         - mountPath: /home/argocd/cmp-server/config/plugin.yaml
           subPath: deploycm.yaml
-          name: cmp-plugin
-        - mountPath: /tmp
-          name: cmp-tmp
-    - name: cmp-python
-      command:
-        - /var/run/argocd/argocd-cmp-server
-      image: python:3.10
-      securityContext:
-        runAsNonRoot: true
-        runAsUser: 999
-      volumeMounts:
-        - mountPath: /var/run/argocd
-          name: var-files
-        - mountPath: /home/argocd/cmp-server/plugins
-          name: plugins
-        - mountPath: /home/argocd/cmp-server/config/plugin.yaml
-          subPath: deploypython.yaml
           name: cmp-plugin
         - mountPath: /tmp
           name: cmp-tmp
