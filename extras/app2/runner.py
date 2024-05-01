@@ -1,11 +1,16 @@
+import random
+
+def number_of_replicas():
+    return random.randint(1, 10)
 
 def main():
-    print("""apiVersion: apps/v1
+    replicas = number_of_replicas()
+    print(f"""apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: nginx-deployment-python
 spec:
-  replicas: 2
+  replicas: {replicas}
   selector:
     matchLabels:
       app: nginx
