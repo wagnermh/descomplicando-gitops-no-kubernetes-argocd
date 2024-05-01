@@ -4,7 +4,7 @@ configs:
   cmp:
     create: true
     plugins:
-      deploycm:
+      deploygolang:
         init:
           command: [sh]
           args:
@@ -29,7 +29,7 @@ repoServer:
       configMap:
         name: argocd-cmp-cm
   extraContainers:
-    - name: cmp-my-plugin
+    - name: deploygolang
       command:
         - /var/run/argocd/argocd-cmp-server
       image: busybox
@@ -42,7 +42,7 @@ repoServer:
         - mountPath: /home/argocd/cmp-server/plugins
           name: plugins
         - mountPath: /home/argocd/cmp-server/config/plugin.yaml
-          subPath: deploycm.yaml
+          subPath: deploygolang.yaml
           name: cmp-plugin
         - mountPath: /tmp
           name: cmp-tmp
