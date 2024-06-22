@@ -1,0 +1,17 @@
+nameOverride: argocd
+
+server:
+  ingress:
+    enabled: true
+    ingressClassName: nginx
+    hostname: argocd-projetofinal.bernardolopes.com
+    path: /
+
+repoServer:
+  metrics:
+    enabled: true
+
+configs:
+  params:
+    server.insecure: true
+    server.dex.server: https://argo-argocd-dex-server:5556
